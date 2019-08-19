@@ -6315,7 +6315,6 @@ func (s *rpcServer) jsonRPCRead(w http.ResponseWriter, r *http.Request, isAdmin 
 			var buffer bytes.Buffer
 			buffer.WriteByte('[')
 			for idx, reply := range results {
-				fmt.Println("REPLY : ", reply)
 				if idx == len(results)-1 {
 					buffer.Write(reply)
 					buffer.WriteByte(']')

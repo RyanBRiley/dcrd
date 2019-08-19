@@ -2090,7 +2090,7 @@ func (s *server) RemoveNodeByAddr(addr string) error {
 }
 
 // CancelPendingConnection removes an address from the list of
-// pending connections
+// pending connections.
 func (s *server) CancelPendingConnection(addr string) error {
 	replyChan := make(chan error)
 

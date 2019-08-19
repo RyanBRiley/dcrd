@@ -519,7 +519,7 @@ func (cm *ConnManager) Remove(id uint64) {
 }
 
 // CancelPending removes the connection corresponding to the given address
-// from the list of pending failed connections
+// from the list of pending failed connections.
 func (cm *ConnManager) CancelPending(addr net.Addr) {
 	if atomic.LoadInt32(&cm.stop) != 0 {
 		return
