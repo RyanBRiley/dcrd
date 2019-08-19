@@ -728,6 +728,7 @@ out:
 func (c *Client) handleSendPostMessage(details *sendPostDetails) {
 	jReq := details.jsonRequest
 	log.Tracef("Sending command [%s] with id %d", jReq.method, jReq.id)
+	fmt.Println("HERE IN HANDLESENDPOSTMESSAGE")
 	httpResponse, err := c.httpClient.Do(details.httpRequest)
 	if err != nil {
 		jReq.responseChan <- &response{err: err}
@@ -803,6 +804,7 @@ cleanup:
 // so it will not block until the send channel is full.
 func (c *Client) sendPostRequest(httpReq *http.Request, jReq *jsonRequest) {
 	// Don't send the message if shutting down.
+	fmt.Println("HERE IN SENDPOSTREQUEST")
 	select {
 	case <-c.shutdown:
 		jReq.responseChan <- &response{result: nil, err: ErrClientShutdown}

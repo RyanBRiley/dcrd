@@ -500,7 +500,12 @@ func handleAddNode(s *rpcServer, cmd interface{}, closeChan <-chan struct{}) (in
 	case "add":
 		err = s.server.ConnectNode(addr, true)
 	case "remove":
-		err = s.server.RemoveNodeByAddr(addr)
+		rerr := s.server.RemoveNodeByAddr(addr)
+		// This connection is still pending, cancel it.
+		if rerr != nil {
+			err = s.server.CancelPendingConnection(addr)
+		}
+		fmt.Println("Remove finished")
 	case "onetry":
 		err = s.server.ConnectNode(addr, false)
 	default:
@@ -6006,6 +6011,7 @@ type parsedRPCCmd struct {
 // error suitable for use in replies.
 func (s *rpcServer) standardCmdResult(cmd *parsedRPCCmd, closeChan <-chan struct{}) (interface{}, error) {
 	handler, ok := rpcHandlers[cmd.method]
+	fmt.Println("HERE IN STANDARDCMDRESULT")
 	if ok {
 		goto handled
 	}
@@ -6107,6 +6113,7 @@ func (s *rpcServer) processRequest(request *dcrjson.Request, isAdmin bool, close
 		// Attempt to parse the JSON-RPC request into a known
 		// concrete command.
 		parsedCmd := parseCmd(request)
+		fmt.Println("HERE IN PROCESSREQUEST: ", parsedCmd)
 		if parsedCmd.err != nil {
 			jsonErr = parsedCmd.err
 		} else {
@@ -6206,6 +6213,7 @@ func (s *rpcServer) jsonRPCRead(w http.ResponseWriter, r *http.Request, isAdmin 
 		}
 
 		if err == nil {
+			fmt.Println("Here in jsonRPCREAD: ", req)
 			resp = s.processRequest(&req, isAdmin, closeChan)
 		}
 
@@ -6311,6 +6319,7 @@ func (s *rpcServer) jsonRPCRead(w http.ResponseWriter, r *http.Request, isAdmin 
 			var buffer bytes.Buffer
 			buffer.WriteByte('[')
 			for idx, reply := range results {
+				fmt.Println("REPLY : ", reply)
 				if idx == len(results)-1 {
 					buffer.Write(reply)
 					buffer.WriteByte(']')
@@ -6387,6 +6396,7 @@ func (s *rpcServer) Start() {
 		}
 
 		// Read and respond to the request.
+		fmt.Println("HERE IN HANDLEFUNC")
 		s.jsonRPCRead(w, r, isAdmin)
 	})
 

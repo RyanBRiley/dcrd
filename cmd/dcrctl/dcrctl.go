@@ -140,6 +140,7 @@ func main() {
 
 	// Marshal the command into a JSON-RPC byte slice in preparation for
 	// sending it to the RPC server.
+	fmt.Println("REQUEST CMD: ", cmd)
 	marshalledJSON, err := dcrjson.MarshalCmd("1.0", 1, cmd)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -149,6 +150,7 @@ func main() {
 	// Send the JSON-RPC request to the server using the user-specified
 	// connection configuration.
 	result, err := sendPostRequest(marshalledJSON, cfg)
+	fmt.Println("REQUEST SENT: %+v", cfg)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)

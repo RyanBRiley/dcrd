@@ -147,6 +147,7 @@ func NewRequest(rpcVersion string, id interface{}, method string, params []inter
 		rawMessage := json.RawMessage(marshalledParam)
 		rawParams = append(rawParams, rawMessage)
 	}
+	fmt.Println("HERE IN NEW REQUEST, method: %v, params: %v, id: %v", method, params, id)
 
 	return &Request{
 		Jsonrpc: rpcVersion,
