@@ -175,7 +175,7 @@ type handleFailed struct {
 	err error
 }
 
-// handleCancelPending is used to remove failing connections from retries
+// handleCancelPending is used to remove failing connections from retries.
 type handleCancelPending struct {
 	addr net.Addr
 	done chan struct{}
